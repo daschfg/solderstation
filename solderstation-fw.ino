@@ -38,4 +38,11 @@ void loop(void)
 {
     station.run();
     delay(1);
+
+    //tempview.set_led_low();
+    //delay(500);
+    //tempview.set_led_mid();
+    //delay(500);
+    //tempview.set_led_high();
+    //delay(500);
 }

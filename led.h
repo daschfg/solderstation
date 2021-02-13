@@ -6,12 +6,25 @@ class Led {
 public:
     Led(int pin);
     void init(void);
+    void refresh(void);
 
     void activate(void);
     void deactivate(void);
+    bool is_activated(void) const;
+
+    bool is_on(void) const;
+    void blink(bool should_activate, uint32_t time);
 
 private:
     int _pin;
+    int _state;
+    bool _is_activated;
+
+    bool _blinking;
+    uint32_t _blinktime;
+    uint32_t _last_toggle;
+
+    void set(bool active);
 };
 
 class TemperatureView {
