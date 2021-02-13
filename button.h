@@ -12,6 +12,9 @@ public:
 
 private:
     int _pin;
+    int _last_state;
+    uint32_t _debounce_start;
+    bool _pressed;
 };
 
 #endif

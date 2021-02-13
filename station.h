@@ -35,6 +35,7 @@ private:
     void refresh_inputs(void);
     void update_controller(void);
     void update_userinterface(void);
+    void update_tempview(void);
 };
 
 #endif

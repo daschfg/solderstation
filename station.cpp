@@ -58,32 +58,52 @@ void Station::update_userinterface(void)
     {
         _heater.increase_temperature();
         _button_up.reset_state();
+        update_tempview();
     }
 
     if (_button_down.was_pressed())
     {
         _heater.decrease_temperature();
         _button_down.reset_state();
+        update_tempview();
     }
 
     if (_button_stdby.was_pressed())
     {
         _heater.toggle_standby();
         _button_stdby.reset_state();
+        update_tempview();
     }
 
     // LED-Zustand setzen. Bei Bedarf: Blinktimer starten
     _tempview.refresh();
+}
 
-    /*
-    if (station.is_in_standby())
+void Station::update_tempview(void)
+{
+    switch (_heater.get_setpoint())
     {
-        tempview->blink_all(500);
+    case SETPOINT_LOW:
+        _tempview.set_led_low();
+        break;
+    case SETPOINT_MID:
+        _tempview.set_led_mid();
+        break;
+    case SETPOINT_HIGH:
+        _tempview.set_led_high();
+        break;
+    default:
+        break;
     }
-    else if (station.is_low_temperature())
+
+    if (_heater.is_in_standby())
     {
-        tempview->set_led_low();
-    }*/
+        _tempview.set_blink(true, 500);
+    }
+    else
+    {
+        _tempview.set_blink(false, 0);
+    }
 }
 
 void Station::update_controller(void)
