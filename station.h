@@ -6,9 +6,6 @@
 #include "heater.h"
 #include "led.h"
 
-#define UI_REFRESH_TIME         50
-#define CONTROLLER_REFRESH_TIME 10
-
 class Station {
 public:
     Station(

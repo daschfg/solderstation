@@ -6,10 +6,10 @@
                                                    
 */
 
-#include "PID_v2.h"
 #include "button.h"
 #include "led.h"
 #include "station.h"
+#include "PID_debug.h"
 
 #define BAUDRATE    115200
 
@@ -25,7 +25,7 @@ int pwm_pin = 3;
 int adc_pin = A0;
 
 TemperatureView tempview(led_low, led_mid, led_high);
-Heater heater;
+Heater heater(adc_pin, pwm_pin);
 Station station(tempview, heater, button_up, button_down, button_stdby);
 
 void setup(void)

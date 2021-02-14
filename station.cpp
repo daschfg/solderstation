@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "station.h"
+#include "config.h"
 #include "helpers.h"
 
 Station::Station(
@@ -23,6 +24,7 @@ void Station::init(void)
     _button_down.init();
     _button_stdby.init();
     _tempview.init();
+    _heater.init();
 }
 
 void Station::run(void)
@@ -115,4 +117,5 @@ void Station::update_controller(void)
     // Berechnung PID-Regler
     // Grenzwertlimitierung
     // PWM-Einstellung
+    _heater.refresh();
 }

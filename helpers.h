@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#define ARRAYSIZE(a) (sizeof(a)/sizeof(a[0]))
+#define ARRAYSIZE(a)    (sizeof(a)/sizeof(a[0]))
 
 bool is_timeout_reached(uint32_t last_run, uint32_t timeout);
 

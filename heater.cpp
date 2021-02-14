@@ -12,6 +12,7 @@ void Heater::init(void)
 {
     _pidcontroller.Reconfigure(&_pid_input, &_pid_output, &_pid_setpoint);
     _pidcontroller.SetMode(AUTOMATIC);
+    set_error(ERR_NONE);
 }
 
 void Heater::increase_temperature(void)
@@ -55,6 +56,29 @@ bool Heater::is_in_standby(void) const
     return _standby;
 }
 
+void Heater::set_error(heatererror_t error)
+{
+    _error = error;
+}
+
+bool Heater::is_in_error(void) const
+{
+    return _error != ERR_NONE;
+}
+
+const char* Heater::error_to_text(void) const
+{
+    switch (_error)
+    {
+    case ERR_INVALID_MEASUREMENT:
+        return "Ungueltiger Messwert";
+    case ERR_NONE:
+        return "Kein Fehler";
+    default:
+        return "<Beschreibung fehlt>";
+    }
+}
+
 tempsetpoint_t Heater::get_setpoint(void) const
 {
     return _setpoint;
@@ -77,9 +101,39 @@ double Heater::get_setpoint_temperature(void) const
 
 double Heater::read_current_temperature(void)
 {
-    uint16_t measurement = analogRead(_adc_pin);
+    // Zur Glättung der Temperaturmessung:
+    // - Mehrfach hintereinander lesen und Mittelwert berechnen
+    // - Laufenden Mittelwert über mehrere Messungen bilden
+    uint16_t measurement = 0;
+    for (uint8_t i = 0; i < MEAS_REPEAT_COUNT; i++)
+    {
+        uint16_t read = analogRead(_adc_pin);
+        if (is_valid_measurement(read))
+            measurement += analogRead(_adc_pin);
+        else
+            set_error(ERR_INVALID_MEASUREMENT);
+    }
+    measurement /= MEAS_REPEAT_COUNT;
+    _prev_measurement = measurement;
+
+
     // TODO Laufenden Mittelwert bilden
     return measurement_to_temperature(measurement);
+}
+
+bool Heater::is_valid_measurement(uint16_t measurement) const
+{
+    uint16_t diff = 
+        measurement < _prev_measurement 
+        ? _prev_measurement - measurement
+        : measurement - _prev_measurement;
+    Serial.print(diff);
+    Serial.print("|");
+    Serial.print(measurement);
+    Serial.print("|");
+    Serial.print(_prev_measurement);
+    Serial.print("| ");
+    return measurement < MEAS_MAX_VALID && diff < MEAS_MAX_JUMP;
 }
 
 double Heater::measurement_to_temperature(uint16_t measurement) const
@@ -94,19 +148,30 @@ void Heater::set_pwm(uint16_t value)
 
 void Heater::refresh(void)
 {
-    set_pwm(0);
+    set_pwm(0); // PWM abschalten, um Messen zu können
+    if (PWM_COOLDOWN_PERIOD > 0)
+        delay(PWM_COOLDOWN_PERIOD);
     double temperature = read_current_temperature();
 
     _pid_setpoint = get_setpoint_temperature();
     _pid_input = temperature;
 
-    if (!is_in_standby())
+    if (is_in_error())
+    {
+
+        Serial.print(temperature);
+        Serial.print(" - Error ");
+        Serial.println(error_to_text());
+        set_pwm(0);
+    }
+    else if (!is_in_standby())
     {
         bool result = _pidcontroller.Compute();
 
-        /*Serial.print("AddrOut: ");
-        Serial.print((uint32_t)&_pid_output);*/
-        uint16_t pwmvalue = min(255, (uint16_t)(_pid_output * 255.0));
+        if (is_in_error())
+            return;
+
+        uint16_t pwmvalue = min(PWM_MAX_OUTPUT, (uint16_t)(_pid_output * 255.0));
         set_pwm(pwmvalue);
 
         if (!result)

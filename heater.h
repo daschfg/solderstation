@@ -10,6 +10,11 @@ enum tempsetpoint_t {
     SETPOINT_HIGH
 };
 
+enum heatererror_t {
+    ERR_NONE,
+    ERR_INVALID_MEASUREMENT
+};
+
 class Heater {
 public:
     Heater(int adc_pin, int pwm_pin);
@@ -20,6 +25,8 @@ public:
     void toggle_standby(void);
 
     bool is_in_standby(void) const;
+    bool is_in_error(void) const;
+
     tempsetpoint_t get_setpoint(void) const;
 
     void refresh(void);
@@ -27,6 +34,8 @@ public:
 private:
     bool _standby;
     tempsetpoint_t _setpoint;
+    heatererror_t _error;
+    uint16_t _prev_measurement;
 
     int _adc_pin;
     int _pwm_pin;
@@ -41,6 +50,10 @@ private:
     double measurement_to_temperature(uint16_t measurement) const;
     
     void set_pwm(uint16_t value);
+
+    bool is_valid_measurement(uint16_t value) const;
+    void set_error(heatererror_t error);
+    const char* error_to_text(void) const;
 };
 
 #endif
