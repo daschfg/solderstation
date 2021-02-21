@@ -15,9 +15,9 @@
 // TODO: Anti-Windup
 
 #define TEMPERATURE_STANDBY     20
-#define TEMPERATURE_LOW         100
-#define TEMPERATURE_MID         200
-#define TEMPERATURE_HIGH        300
+#define TEMPERATURE_LOW         250
+#define TEMPERATURE_MID         300
+#define TEMPERATURE_HIGH        350
 
 #define ADC_GAIN    0.7869
 #define ADC_OFFSET  29.8872
@@ -27,7 +27,7 @@
 #define MEAS_MAX_VALID          600     // Höchster noch gültiger Messwert
 #define MEAS_MAX_JUMP           100     // Größter erlaubter Sprung zwischen zwei Messwerten
 
-#define PWM_MAX_OUTPUT          40      // Maximal zulässiger PWM-Wert
+#define PWM_MAX_OUTPUT          50      // Maximal zulässiger PWM-Wert
 #define PWM_COOLDOWN_PERIOD     3       // Wartezeit nach Abschalten PWM, bevor ADC-Messung beginnt
 
 #endif
