@@ -13,15 +13,15 @@
 
 #define BAUDRATE    115200
 
-Button button_up(6);
-Button button_down(7);
-Button button_stdby(8);
+Button button_up(8);
+Button button_down(9);
+Button button_stdby(10);
 
 Led led_low(2);
-Led led_mid(4);
-Led led_high(5);
+Led led_mid(3);
+Led led_high(4);
 
-int pwm_pin = 3;
+int pwm_pin = 6;
 int adc_pin = A0;
 
 TemperatureView tempview(led_low, led_mid, led_high);
@@ -38,11 +38,4 @@ void loop(void)
 {
     station.run();
     delay(1);
-
-    //tempview.set_led_low();
-    //delay(500);
-    //tempview.set_led_mid();
-    //delay(500);
-    //tempview.set_led_high();
-    //delay(500);
 }
