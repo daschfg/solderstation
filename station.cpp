@@ -98,7 +98,12 @@ void Station::update_tempview(void)
         break;
     }
 
-    if (_heater.is_in_standby())
+    if (_heater.is_in_error())
+    {
+        _tempview.set_led_high();
+        _tempview.set_blink(true, 100);
+    }
+    else if (_heater.is_in_standby())
     {
         _tempview.set_blink(true, 500);
     }
