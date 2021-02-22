@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "heater.h"
 #include "config.h"
+#include "PWM.h"
 
 Heater::Heater(int adc_pin, int pwm_pin)
     : _adc_pin(adc_pin), 
@@ -143,7 +144,7 @@ double Heater::measurement_to_temperature(uint16_t measurement) const
 
 void Heater::set_pwm(uint16_t value)
 {
-    analogWrite(_pwm_pin, value);
+    pwmWrite(_pwm_pin, value);
 }
 
 void Heater::refresh(void)
