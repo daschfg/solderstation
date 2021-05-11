@@ -77,6 +77,12 @@ void Station::update_userinterface(void)
         update_tempview();
     }
 
+    if (_heater.has_status_changed())
+    {
+        _heater.reset_change();
+        update_tempview();
+    }
+
     // LED-Zustand setzen. Bei Bedarf: Blinktimer starten
     _tempview.refresh();
 }
@@ -115,7 +121,6 @@ void Station::update_tempview(void)
 
 void Station::update_controller(void)
 {
-    // TODO ...
     // Aktuellen ADC-Wert einlesen
     // Umrechnen in Temperaturwert
     // Abschaltung bei ungültigen Messwerten

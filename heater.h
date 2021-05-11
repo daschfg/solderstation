@@ -27,6 +27,9 @@ public:
     bool is_in_standby(void) const;
     bool is_in_error(void) const;
 
+    bool has_status_changed(void) const;
+    void reset_change(void);
+
     tempsetpoint_t get_setpoint(void) const;
 
     void refresh(void);
@@ -36,6 +39,7 @@ private:
     tempsetpoint_t _setpoint;
     heatererror_t _error;
     uint16_t _prev_measurement;
+    bool _status_changed;
 
     int _adc_pin;
     int _pwm_pin;

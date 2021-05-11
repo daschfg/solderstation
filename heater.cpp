@@ -14,6 +14,7 @@ void Heater::init(void)
     _pidcontroller.Reconfigure(&_pid_input, &_pid_output, &_pid_setpoint);
     _pidcontroller.SetMode(AUTOMATIC);
     set_error(ERR_NONE);
+    reset_change();
 }
 
 void Heater::increase_temperature(void)
@@ -59,6 +60,8 @@ bool Heater::is_in_standby(void) const
 
 void Heater::set_error(heatererror_t error)
 {
+    if (_error != error)
+        _status_changed = true;
     _error = error;
 }
 
@@ -78,6 +81,16 @@ const char* Heater::error_to_text(void) const
     default:
         return "<Beschreibung fehlt>";
     }
+}
+
+bool Heater::has_status_changed(void) const
+{
+    return _status_changed;
+}
+
+void Heater::reset_change(void)
+{
+    _status_changed = false;
 }
 
 tempsetpoint_t Heater::get_setpoint(void) const
