@@ -6,8 +6,6 @@
 //#define CONTROLLER_REFRESH_TIME 10
 
 // Parameter übernommen vom Maiskolben (https://hannio.org)
-//#define PID_Kp 3.0    // * (P)roportional Tuning Parameter
-//#define PID_Ki 0.0  // * (I)ntegral Tuning Parameter
 #define PID_Kp 0.003    // * (P)roportional Tuning Parameter
 #define PID_Ki 0.00001  // * (I)ntegral Tuning Parameter
 #define PID_Kd 0.0      // * (D)erivative Tuning Parameter -> Für thermische Vorgänge weitestgehend unnötig

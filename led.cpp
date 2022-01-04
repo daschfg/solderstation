@@ -70,8 +70,11 @@ void Led::refresh(void)
     }
 }
 
-TemperatureView::TemperatureView(Led& led_low, Led& led_mid, Led& led_high)
-    : _led_low(led_low), _led_mid(led_mid), _led_high(led_high)
+TemperatureView::TemperatureView(
+        Led& led_low, Led& led_mid, Led& led_high)
+    : _led_low(led_low),
+      _led_mid(led_mid),
+      _led_high(led_high)
 { }
 
 void TemperatureView::init(void)
