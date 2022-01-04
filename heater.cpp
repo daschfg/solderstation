@@ -2,6 +2,7 @@
 #include "heater.h"
 #include "config.h"
 #include "PWM.h"
+#include "helpers.h"
 
 Heater::Heater(int adc_pin, int pwm_pin)
     : _adc_pin(adc_pin), 
@@ -185,7 +186,7 @@ void Heater::refresh(void)
         if (is_in_error())
             return;
 
-        uint16_t pwmvalue = min(PWM_MAX_OUTPUT, (uint16_t)(_pid_output * 255.0));
+        uint16_t pwmvalue = MIN(PWM_MAX_OUTPUT, (uint16_t)(_pid_output * 255.0));
         set_pwm(pwmvalue);
 
         if (!result)
