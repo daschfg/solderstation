@@ -2,7 +2,7 @@
 #define _HEATER_H_
 
 #include <stdint.h>
-#include "PID_debug.h"
+#include "PID_v1.h"
 
 enum tempsetpoint_t {
     SETPOINT_LOW,

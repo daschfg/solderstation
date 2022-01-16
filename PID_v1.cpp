@@ -5,18 +5,13 @@
  * This Library is licensed under the MIT License
  **********************************************************************************************/
 
-#ifdef ARDUINO
 #if ARDUINO >= 100
   #include "Arduino.h"
 #else
   #include "WProgram.h"
 #endif
-#else
-#include <string.h>
-#define millis NULL // TODO Durch sinnvollere Funktion ersetzen
-#endif
 
-#include "PID_debug.h"
+#include "PID_v1.h"
 
 /*Constructor (...)*********************************************************
  *    The parameters specified here are those for for which we can't set up
@@ -80,15 +75,6 @@ bool PID::Compute()
       double error = *mySetpoint - input;
       double dInput = (input - lastInput);
       outputSum+= (ki * error);
-
-      /*Serial.print(" - AddrInPid: ");
-      Serial.print((uint32_t)myOutput);
-      Serial.print(" - In: ");
-      Serial.print(input);
-      Serial.print("- dIn: ");
-      Serial.print(dInput);
-      Serial.print(" - Error: ");
-      Serial.println(error);*/
 
       /*Add Proportional on Measurement, if P_ON_M is specified*/
       if(!pOnE) outputSum-= kp * dInput;

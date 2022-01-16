@@ -2,8 +2,6 @@
 #define PID_v1_h
 #define LIBRARY_VERSION	1.2.1
 
-#include <stdint.h>
-
 //Constants used in some of the functions below
 #define AUTOMATIC	1
 #define MANUAL	0
